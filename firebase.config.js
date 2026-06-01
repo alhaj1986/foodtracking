@@ -6,12 +6,12 @@ import { getDatabase } from 'firebase/database';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_AUTH_DOMAIN',
+  apiKey: 'AIzaSyC0mmwjW8s6ipTn9VRM-6qjZB3GaIBj5Ec',
+  authDomain: 'foodtracking-5a8ea.firebaseapp.com',
   projectId: 'foodtracking-5a8ea',
-  storageBucket: 'YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-  appId: 'foodtracking-5a8ea',
+  storageBucket: 'foodtracking-5a8ea.firebasestorage.app',
+  messagingSenderId: '448850766919',
+  appId: '1:448850766919:android:dd448e86459e1e527b5562',
   databaseURL: 'https://foodtracking-5a8ea-default-rtdb.firebaseio.com/',
 };
 

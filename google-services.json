@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "448850766919",
+    "firebase_url": "https://foodtracking-5a8ea-default-rtdb.firebaseio.com",
+    "project_id": "foodtracking-5a8ea",
+    "storage_bucket": "foodtracking-5a8ea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448850766919:android:dd448e86459e1e527b5562",
+        "android_client_info": {
+          "package_name": "foodtracking.mpm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0mmwjW8s6ipTn9VRM-6qjZB3GaIBj5Ec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

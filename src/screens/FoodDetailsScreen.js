@@ -10,12 +10,9 @@ import {
   Share,
   Alert,
 } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
 
 const FoodDetailsScreen = ({ route }) => {
   const { food } = route.params;
-
-  const coordinates = food.location ? food.location.split(',').map(Number) : null;
 
   const handleCall = () => {
     const phoneNumber = `tel:${food.mobileNumber}`;
@@ -43,6 +40,16 @@ const FoodDetailsScreen = ({ route }) => {
     }
   };
 
+  const handleOpenMap = () => {
+    if (food.location) {
+      const [latitude, longitude] = food.location.split(',').map(Number);
+      const url = `https://maps.google.com/?q=${latitude},${longitude}`;
+      Linking.openURL(url).catch(() => {
+        Alert.alert('Error', 'Could not open map');
+      });
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       {food.imageUrl && (
@@ -62,27 +69,10 @@ const FoodDetailsScreen = ({ route }) => {
           <DetailRow label="Posted" value={new Date(food.timestamp).toLocaleDateString()} icon="📅" />
         </View>
 
-        {coordinates && (
-          <View style={styles.mapContainer}>
-            <Text style={styles.sectionTitle}>Location on Map</Text>
-            <MapView
-              style={styles.map}
-              initialRegion={{
-                latitude: coordinates[0],
-                longitude: coordinates[1],
-                latitudeDelta: 0.05,
-                longitudeDelta: 0.05,
-              }}
-            >
-              <Marker
-                coordinate={{
-                  latitude: coordinates[0],
-                  longitude: coordinates[1],
-                }}
-                title={food.foodType}
-              />
-            </MapView>
-          </View>
+        {food.location && (
+          <TouchableOpacity style={styles.mapButton} onPress={handleOpenMap}>
+            <Text style={styles.mapButtonText}>🗺️ View Location on Map</Text>
+          </TouchableOpacity>
         )}
 
         <View style={styles.sectionContainer}>
@@ -166,20 +156,17 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: '500',
   },
-  mapContainer: {
+  mapButton: {
+    backgroundColor: '#3b5998',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
     marginBottom: 20,
   },
-  sectionTitle: {
-    fontSize: 18,
+  mapButtonText: {
+    color: '#fff',
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-  },
-  map: {
-    width: '100%',
-    height: 250,
-    borderRadius: 8,
-    backgroundColor: '#e0e0e0',
   },
   sectionContainer: {
     backgroundColor: '#fff',
@@ -187,6 +174,12 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     elevation: 2,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
   },
   contactButton: {
     backgroundColor: '#2ecc71',

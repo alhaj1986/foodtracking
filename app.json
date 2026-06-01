@@ -1,10 +1,10 @@
 {
-  "name": "foodtracking",
-  "displayName": "Food Tracking",
   "expo": {
     "name": "Food Tracking",
     "slug": "foodtracking",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -13,19 +13,19 @@
       "bundleIdentifier": "com.foodtracking.app"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.foodtracking.app"
     },
     "plugins": [
       [
-        "react-native-maps",
+        "expo-location",
         {
-          "Maps": {
-            "GOOGLE_MAPS_API_KEY": "YOUR_GOOGLE_MAPS_API_KEY"
-          }
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to access your location"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos"
         }
       ]
     ]

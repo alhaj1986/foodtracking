@@ -10,8 +10,8 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
-import Geolocation from 'react-native-geolocation-service';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import { database, storage, auth } from '../firebase.config';
 import { ref as dbRef, push, set } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -33,42 +33,39 @@ const PostFoodScreen = ({ navigation }) => {
   const getCurrentLocation = async () => {
     setFetchingLocation(true);
     try {
-      Geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
-          // In a real app, you'd use a reverse geocoding API to get the address
-          setFetchingLocation(false);
-        },
-        (error) => {
-          console.error(error);
-          setFetchingLocation(false);
-          Alert.alert('Location', 'Could not get your location. Please enable location services.');
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-      );
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission', 'Location permission is required');
+        setFetchingLocation(false);
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = loc.coords;
+      setLocation(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+      setFetchingLocation(false);
     } catch (error) {
       console.error('Location error:', error);
       setFetchingLocation(false);
+      Alert.alert('Location', 'Could not get your location.');
     }
   };
 
-  const pickImage = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
+  const pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
         quality: 0.7,
-      },
-      (response) => {
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.errorCode) {
-          Alert.alert('Error', 'Failed to pick image');
-        } else if (response.assets && response.assets.length > 0) {
-          setImage(response.assets[0]);
-        }
+      });
+
+      if (!result.canceled) {
+        setImage(result.assets[0]);
       }
-    );
+    } catch (error) {
+      Alert.alert('Error', 'Failed to pick image');
+    }
   };
 
   const uploadImageToStorage = async (imageUri) => {
@@ -125,10 +122,10 @@ const PostFoodScreen = ({ navigation }) => {
       await set(newFoodRef, foodData);
 
       Alert.alert('Success', 'Food item posted successfully!');
-      navigation.navigate('Home');
+      navigation.navigate('HomeTab');
     } catch (error) {
       console.error('Error posting food:', error);
-      Alert.alert('Error', 'Failed to post food item');
+      Alert.alert('Error', error.message || 'Failed to post food item');
     } finally {
       setLoading(false);
     }

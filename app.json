@@ -1,0 +1,33 @@
+{
+  "name": "foodtracking",
+  "displayName": "Food Tracking",
+  "expo": {
+    "name": "Food Tracking",
+    "slug": "foodtracking",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTabletMode": true,
+      "bundleIdentifier": "com.foodtracking.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.foodtracking.app"
+    },
+    "plugins": [
+      [
+        "react-native-maps",
+        {
+          "Maps": {
+            "GOOGLE_MAPS_API_KEY": "YOUR_GOOGLE_MAPS_API_KEY"
+          }
+        }
+      ]
+    ]
+  }
+}
